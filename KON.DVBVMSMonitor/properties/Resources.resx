@@ -1,0 +1,318 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Service_Installing" xml:space="preserve">
+    <value>Installing service at</value>
+  </data>
+  <data name="Service_Uninstalling" xml:space="preserve">
+    <value>Uninstalling service at</value>
+  </data>
+  <data name="Service_UnInstalling_Error" xml:space="preserve">
+    <value>There was an error un-/installing the service:</value>
+  </data>
+  <data name="Program_AdministratorRequired" xml:space="preserve">
+    <value>Not executed with administrative permissions - expect untested misbehavior!</value>
+  </data>
+  <data name="WebService_RequestCreated" xml:space="preserve">
+    <value>HttpWebRequest Create successful!</value>
+  </data>
+  <data name="WebService_RequestDisposed" xml:space="preserve">
+    <value>HttpWebRequest Dispose successful!</value>
+  </data>
+  <data name="WebService_RequestTimedOut" xml:space="preserve">
+    <value>HttpWebRequest Time-Out!</value>
+  </data>
+  <data name="WebService_ResponseCreated" xml:space="preserve">
+    <value>HttpWebResponse Create successful!</value>
+  </data>
+  <data name="WebService_ResponseDisposed" xml:space="preserve">
+    <value>HttpWebResponse Dispose successful!</value>
+  </data>
+  <data name="WebService_ServiceRestartNotRequired" xml:space="preserve">
+    <value>Service restart not required!</value>
+  </data>
+  <data name="WebService_StatusCodeNotOK" xml:space="preserve">
+    <value>StatusCode was not HttpStatusCode.OK!</value>
+  </data>
+  <data name="WebService_StatusCodeOK" xml:space="preserve">
+    <value>StatusCode was HttpStatusCode.OK!</value>
+  </data>
+  <data name="Program_LogName" xml:space="preserve">
+    <value>Application</value>
+  </data>
+  <data name="Program_Name" xml:space="preserve">
+    <value>KON.DVBVMSMonitor</value>
+  </data>
+  <data name="Program_RunAsConsole" xml:space="preserve">
+    <value>Press enter to exit ...</value>
+  </data>
+  <data name="TargetService_StartedNotSuccessful" xml:space="preserve">
+    <value>Service start failed!</value>
+  </data>
+  <data name="TargetService_KilledNotSuccessful" xml:space="preserve">
+    <value>Process(es) kill failed! - (re)trying next cycle!</value>
+  </data>
+  <data name="TargetService_KilledSuccessful" xml:space="preserve">
+    <value>Process(es) kill successful! - Service stop successful!</value>
+  </data>
+  <data name="TargetService_Killing" xml:space="preserve">
+    <value>Process(es) killing ...</value>
+  </data>
+  <data name="TargetService_RestartedNotSuccessful" xml:space="preserve">
+    <value>Service restart failed! - (re)trying next cycle!</value>
+  </data>
+  <data name="TargetService_RestartedSuccessful" xml:space="preserve">
+    <value>Service restart successful!</value>
+  </data>
+  <data name="TargetService_StartedSuccessful" xml:space="preserve">
+    <value>Service start successful!</value>
+  </data>
+  <data name="TargetService_Starting" xml:space="preserve">
+    <value>Service starting ...</value>
+  </data>
+  <data name="TargetService_StoppedSuccessful" xml:space="preserve">
+    <value>Service stop successful!</value>
+  </data>
+  <data name="TargetService_Stopping" xml:space="preserve">
+    <value>Service stopping ...</value>
+  </data>
+  <data name="TargetService_StartDelayed" xml:space="preserve">
+    <value>Service start delayed!</value>
+  </data>
+  <data name="frmConfiguration_BaseTitle" xml:space="preserve">
+    <value>Configuration</value>
+  </data>
+  <data name="frmConfiguration_btnSave_Text" xml:space="preserve">
+    <value>&amp;Save</value>
+  </data>
+  <data name="frmConfiguration_btnSave_Text_Disabled" xml:space="preserve">
+    <value>&amp;OK</value>
+  </data>
+  <data name="frmConfiguration_srsKeyTargetServiceCheckInterval" xml:space="preserve">
+    <value>TargetServiceCheckInterval</value>
+  </data>
+  <data name="frmConfiguration_srsKeyTargetServiceCheckInterval_DefaultValue" xml:space="preserve">
+    <value>10</value>
+  </data>
+  <data name="frmConfiguration_srsKeyTargetServiceStartDelay" xml:space="preserve">
+    <value>TargetServiceStartDelay</value>
+  </data>
+  <data name="frmConfiguration_srsKeyTargetServiceStartDelay_DefaultValue" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="frmConfiguration_srsKeyLogLevel" xml:space="preserve">
+    <value>LogLevel</value>
+  </data>
+  <data name="frmConfiguration_srsKeyLogLevel_DefaultValue" xml:space="preserve">
+    <value>Warning</value>
+  </data>
+  <data name="frmConfiguration_srsKeyLogToConsole" xml:space="preserve">
+    <value>LogToConsole</value>
+  </data>
+  <data name="frmConfiguration_srsKeyLogToConsole_DefaultValue" xml:space="preserve">
+    <value>false</value>
+  </data>
+  <data name="frmConfiguration_srsKeyTargetServiceProcessName" xml:space="preserve">
+    <value>TargetServiceProcessName</value>
+  </data>
+  <data name="frmConfiguration_srsKeyTargetServiceProcessName_DefaultValue" xml:space="preserve">
+    <value>DVBVservice</value>
+  </data>
+  <data name="frmConfiguration_srsKeyTargetServiceName" xml:space="preserve">
+    <value>TargetServiceName</value>
+  </data>
+  <data name="frmConfiguration_srsKeyTargetServiceName_DefaultValue" xml:space="preserve">
+    <value>DVBVRecorder</value>
+  </data>
+  <data name="frmConfiguration_srsKeyVerboseLogging" xml:space="preserve">
+    <value>VerboseLogging</value>
+  </data>
+  <data name="frmConfiguration_srsKeyVerboseLogging_DefaultValue" xml:space="preserve">
+    <value>false</value>
+  </data>
+  <data name="frmConfiguration_srsKeyWebServiceTimeout" xml:space="preserve">
+    <value>WebServiceTimeout</value>
+  </data>
+  <data name="frmConfiguration_srsKeyWebServiceTimeout_DefaultValue" xml:space="preserve">
+    <value>5</value>
+  </data>
+  <data name="frmConfiguration_srsKeyWebServiceUrl" xml:space="preserve">
+    <value>WebServiceUrl</value>
+  </data>
+  <data name="frmConfiguration_srsKeyWebServiceUrl_DefaultValue" xml:space="preserve">
+    <value>http://localhost:8080/api/status2.html</value>
+  </data>
+  <data name="frmConfiguration_srsKeyTargetServicePathWithFilename" xml:space="preserve">
+    <value>TargetServicePathWithFilename</value>
+  </data>
+  <data name="frmConfiguration_srsKeyTargetServicePathWithFilename_DefaultValue" xml:space="preserve">
+    <value>C:\Program Files (x86)\DVBViewer\DVBVservice.exe</value>
+  </data>
+  <data name="frmConfiguration_srsKeyWebServiceEnabled" xml:space="preserve">
+    <value>WebServiceEnabled</value>
+  </data>
+  <data name="frmConfiguration_srsKeyWebServiceEnabled_DefaultValue" xml:space="preserve">
+    <value>true</value>
+  </data>
+  <data name="frmConfiguration_srsKeyWebServiceCheckInterval" xml:space="preserve">
+    <value>WebServiceCheckInterval</value>
+  </data>
+  <data name="frmConfiguration_srsKeyWebServiceCheckInterval_DefaultValue" xml:space="preserve">
+    <value>10</value>
+  </data>
+  <data name="frmConfiguration_srsKeyForceBindEnabled" xml:space="preserve">
+    <value>ForceBindEnabled</value>
+  </data>
+  <data name="frmConfiguration_srsKeyForceBindEnabled_DefaultValue" xml:space="preserve">
+    <value>false</value>
+  </data>
+  <data name="frmConfiguration_srsKeyForceBindPathWithFilename" xml:space="preserve">
+    <value>ForceBindPathWithFilename</value>
+  </data>
+  <data name="frmConfiguration_srsKeyForceBindPathWithFilename_DefaultValue" xml:space="preserve">
+    <value>C:\Program Files\KON.DVBVMSMonitor\ForceBindIP64.exe</value>
+  </data>
+  <data name="frmConfiguration_srsKeyForceBindIPAddress" xml:space="preserve">
+    <value>ForceBindIPAddress</value>
+  </data>
+  <data name="frmConfiguration_srsKeyForceBindIPAddress_DefaultValue" xml:space="preserve">
+    <value>127.0.0.1</value>
+  </data>
+  <data name="frmConfiguration_srsKeyTargetServiceTimeout" xml:space="preserve">
+    <value>TargetServiceTimeout</value>
+  </data>
+  <data name="frmConfiguration_srsKeyTargetServiceTimeout_DefaultValue" xml:space="preserve">
+    <value>10</value>
+  </data>
+  <data name="TargetService_StoppedNotSuccessful" xml:space="preserve">
+    <value>Service stop failed!</value>
+  </data>
+  <data name="TargetService_EnabledSuccessful" xml:space="preserve">
+    <value>Service enable successful!</value>
+  </data>
+  <data name="TargetService_EnabledNotSuccessful" xml:space="preserve">
+    <value>Service enable failed!</value>
+  </data>
+  <data name="TargetService_DisabledNotSuccessful" xml:space="preserve">
+    <value>Service disable failed!</value>
+  </data>
+  <data name="TargetService_DisabledSuccessful" xml:space="preserve">
+    <value>Service disable successful!</value>
+  </data>
+</root>

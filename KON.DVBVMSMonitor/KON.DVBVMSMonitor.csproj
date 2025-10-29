@@ -1,0 +1,43 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <AssemblyName>KON.DVBVMSMonitor</AssemblyName>
+    <GenerateAssemblyInfo>False</GenerateAssemblyInfo>
+	  <OutputType>Exe</OutputType>
+	  <UseWindowsForms>True</UseWindowsForms>
+	  <TargetFramework>net9.0-windows10.0.17763.0</TargetFramework>
+  </PropertyGroup>
+  <PropertyGroup>
+    <LangVersion>latest</LangVersion>
+    <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup>
+    <RootNamespace>KON.DVBVMSMonitor</RootNamespace>
+    <StartupObject>KON.DVBVMSMonitor.Program</StartupObject>
+    <ApplicationIcon>properties\KON.DVBVMSMonitor.ico</ApplicationIcon>
+    <AppDesignerFolder>properties</AppDesignerFolder>
+    <SupportedOSPlatformVersion>10.0.17763.0</SupportedOSPlatformVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+  </PropertyGroup>
+  <ItemGroup>
+    <Content Include="properties\KON.DVBVMSMonitor.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="System.Management" Version="9.0.10" />
+    <PackageReference Include="Topshelf" Version="4.3.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Update="properties\Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Update="properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+</Project>
