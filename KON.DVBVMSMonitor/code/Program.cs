@@ -30,9 +30,8 @@ namespace KON.DVBVMSMonitor {
                         break;
                     }
                     default: {
-                        Global.ShowWindow(Global.GetConsoleWindow(), Global.SW_HIDE);
+                        Global.ShowWindow(Global.GetConsoleWindow(), 0);
                         new frmConfiguration().ShowDialog();
-                        Global.ShowWindow(Global.GetConsoleWindow(), Global.SW_SHOW);
                         break;
                     }
                 }

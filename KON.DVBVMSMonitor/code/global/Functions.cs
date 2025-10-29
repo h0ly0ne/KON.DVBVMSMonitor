@@ -1,4 +1,3 @@
-using Microsoft.Win32;
 using System;
 using System.Diagnostics;
 using System.Linq;
@@ -9,17 +8,15 @@ using System.Runtime.Versioning;
 using System.Security.Principal;
 using System.ServiceProcess;
 
+using Microsoft.Win32;
+
 namespace KON.DVBVMSMonitor {
     [SupportedOSPlatform("windows")]
 	public static class Global {
-        [DllImport("kernel32.dll")]
-        public static extern IntPtr GetConsoleWindow();
-
         [DllImport("user32.dll")]
         public static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
-
-        public const int SW_HIDE = 0;
-        public const int SW_SHOW = 5;
+        [DllImport("kernel32.dll")]
+        public static extern IntPtr GetConsoleWindow();
 
         public static readonly WindowsEventLogger welCurrentWindowsEventLogger = new();
 
