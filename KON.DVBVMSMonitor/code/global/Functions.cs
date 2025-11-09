@@ -7,6 +7,7 @@ using System.Runtime.InteropServices;
 using System.Runtime.Versioning;
 using System.Security.Principal;
 using System.ServiceProcess;
+using System.Threading;
 
 using Microsoft.Win32;
 
@@ -19,6 +20,8 @@ namespace KON.DVBVMSMonitor {
         public static extern IntPtr GetConsoleWindow();
 
         public static readonly WindowsEventLogger welCurrentWindowsEventLogger = new();
+        public static RegistrySettings srsLocalRegistrySettings { get; } = new(Resources.Program_Name, RegistrySettings.RegistryHive.HKLM);
+        public static Process pLocalTargetServiceProcess;
 
         static Global() {
             welCurrentWindowsEventLogger.SetEventSource(Resources.Program_Name, Resources.Program_LogName);
@@ -52,16 +55,14 @@ namespace KON.DVBVMSMonitor {
             if (IsServiceRunning(strLocalServiceName))
                 return true;
 
-            try
-            {
+            try {
                 var scCurrentServiceController = GetService(strLocalServiceName);
                 scCurrentServiceController.Start();
                 scCurrentServiceController.WaitForStatus(ServiceControllerStatus.Running, tsTimeout);
 
                 return true;
             }
-            catch
-            {
+            catch {
                 return false;
             }
         }
@@ -139,17 +140,108 @@ namespace KON.DVBVMSMonitor {
 
         public static bool IsServiceDisabled(string strLocalServiceName)
         {
-            try
-            {
+            try {
                 if (string.IsNullOrEmpty(strLocalServiceName))
                     return false;
 
                 return Convert.ToString(new ManagementObjectSearcher($"SELECT * FROM Win32_Service WHERE Name='{strLocalServiceName}'").Get().Cast<ManagementObject>().ToList().FirstOrDefault()["StartMode"]) == "Disabled";
             }
-            catch
-            {
+            catch {
                 return false;
             }
+        }
+
+        public static void RestartService(string strLocalTargetServiceName, int iLocalTargetServiceTimeout)
+        {
+            var bForceBindEnabled = srsLocalRegistrySettings.GetBoolean(Resources.frmConfiguration_srsKeyForceBindEnabled, Convert.ToBoolean(Resources.frmConfiguration_srsKeyForceBindEnabled_DefaultValue));
+            var sTargetServiceProcessName = srsLocalRegistrySettings.GetString(Resources.frmConfiguration_srsKeyTargetServiceProcessName, Resources.frmConfiguration_srsKeyTargetServiceProcessName_DefaultValue);
+            var iTargetServiceStartDelay = srsLocalRegistrySettings.GetInteger(Resources.frmConfiguration_srsKeyTargetServiceStartDelay, Convert.ToInt32(Resources.frmConfiguration_srsKeyTargetServiceStartDelay_DefaultValue));
+            var sForceBindPathWithFilename = srsLocalRegistrySettings.GetString(Resources.frmConfiguration_srsKeyForceBindPathWithFilename, Resources.frmConfiguration_srsKeyForceBindPathWithFilename_DefaultValue);
+            var sForceBindIPAddress = srsLocalRegistrySettings.GetString(Resources.frmConfiguration_srsKeyForceBindIPAddress, Resources.frmConfiguration_srsKeyForceBindIPAddress_DefaultValue);
+            var sTargetServicePathWithFilename = srsLocalRegistrySettings.GetString(Resources.frmConfiguration_srsKeyTargetServicePathWithFilename, Resources.frmConfiguration_srsKeyTargetServicePathWithFilename_DefaultValue);
+
+            if (!bForceBindEnabled) {
+                if (IsServiceRunning(strLocalTargetServiceName)) {
+                    welCurrentWindowsEventLogger.WriteEntry(Resources.TargetService_Stopping, 0, WindowsEventLogger.LogType.Information);
+                    welCurrentWindowsEventLogger.WriteConsole(Resources.TargetService_Stopping, WindowsEventLogger.LogType.Information, false);
+
+                    if (StopService(strLocalTargetServiceName, iLocalTargetServiceTimeout)) {
+                        welCurrentWindowsEventLogger.WriteEntry(Resources.TargetService_StoppedSuccessful, 0, WindowsEventLogger.LogType.Information);
+                        welCurrentWindowsEventLogger.WriteConsole(Resources.TargetService_StoppedSuccessful, WindowsEventLogger.LogType.Information, false);
+                    }
+                    else {
+                        try {
+                            welCurrentWindowsEventLogger.WriteEntry(Resources.TargetService_Killing, 0, WindowsEventLogger.LogType.Information);
+                            welCurrentWindowsEventLogger.WriteConsole(Resources.TargetService_Killing, WindowsEventLogger.LogType.Information, false);
+                            Process.GetProcesses().Where(pr => pr.ProcessName.Equals(sTargetServiceProcessName)).ToList().ForEach(delegate (Process pCurrentProcess) { pCurrentProcess.Kill(); pCurrentProcess.WaitForExit(); pCurrentProcess.Dispose(); });
+                            welCurrentWindowsEventLogger.WriteEntry(Resources.TargetService_KilledSuccessful, 0, WindowsEventLogger.LogType.Information);
+                            welCurrentWindowsEventLogger.WriteConsole(Resources.TargetService_KilledSuccessful, WindowsEventLogger.LogType.Information, false);
+                        }
+                        catch {
+                            welCurrentWindowsEventLogger.WriteEntry(Resources.TargetService_KilledNotSuccessful, 0, WindowsEventLogger.LogType.Warning);
+                            welCurrentWindowsEventLogger.WriteConsole(Resources.TargetService_KilledNotSuccessful, WindowsEventLogger.LogType.Warning, false);
+                            welCurrentWindowsEventLogger.WriteEntry(Resources.TargetService_StoppedNotSuccessful, 0, WindowsEventLogger.LogType.Warning);
+                            welCurrentWindowsEventLogger.WriteConsole(Resources.TargetService_StoppedNotSuccessful, WindowsEventLogger.LogType.Warning, false);
+                            return;
+                        }
+                    }
+                }
+
+                if (!IsServiceRunning(strLocalTargetServiceName)) {
+                    welCurrentWindowsEventLogger.WriteEntry(Resources.TargetService_Starting, 0, WindowsEventLogger.LogType.Information);
+                    welCurrentWindowsEventLogger.WriteConsole(Resources.TargetService_Starting, WindowsEventLogger.LogType.Information, false);
+
+                    if (StartService(strLocalTargetServiceName, iLocalTargetServiceTimeout)) {
+                        welCurrentWindowsEventLogger.WriteEntry(Resources.TargetService_StartedSuccessful, 0, WindowsEventLogger.LogType.Information);
+                        welCurrentWindowsEventLogger.WriteConsole(Resources.TargetService_StartedSuccessful, WindowsEventLogger.LogType.Information, false);
+                    }
+                    else {
+                        welCurrentWindowsEventLogger.WriteEntry(Resources.TargetService_StartedNotSuccessful, 0, WindowsEventLogger.LogType.Warning);
+                        welCurrentWindowsEventLogger.WriteConsole(Resources.TargetService_StartedNotSuccessful, WindowsEventLogger.LogType.Warning, false);
+                        welCurrentWindowsEventLogger.WriteEntry(Resources.TargetService_RestartedNotSuccessful, 0, WindowsEventLogger.LogType.Warning);
+                        welCurrentWindowsEventLogger.WriteConsole(Resources.TargetService_RestartedNotSuccessful, WindowsEventLogger.LogType.Warning, false);
+                        return;
+                    }
+                }
+            }
+            else {
+                try {
+                    Process.GetProcesses().Where(pr => pr.ProcessName.Equals(sTargetServiceProcessName)).ToList().ForEach(delegate (Process pCurrentProcess) { pCurrentProcess.Kill(); pCurrentProcess.WaitForExit(); pCurrentProcess.Dispose(); });
+                    pLocalTargetServiceProcess = Process.GetProcesses().Where(pr => pr.ProcessName.Equals(sTargetServiceProcessName)).ToList().FirstOrDefault();
+
+                    if (pLocalTargetServiceProcess == null) {
+                        if (iTargetServiceStartDelay > 0) {
+                            welCurrentWindowsEventLogger.WriteEntry(Resources.TargetService_StartDelayed, 0, WindowsEventLogger.LogType.Information);
+                            welCurrentWindowsEventLogger.WriteConsole(Resources.TargetService_StartDelayed, WindowsEventLogger.LogType.Information, false);
+                            Thread.Sleep(iTargetServiceStartDelay * 1000);
+                        }
+
+                        pLocalTargetServiceProcess = Process.Start("\"" + sForceBindPathWithFilename + "\" " + sForceBindIPAddress + " \"" + sTargetServicePathWithFilename + "\"");
+                        Thread.Sleep(1000);
+                        pLocalTargetServiceProcess = Process.GetProcesses().Where(pr => pr.ProcessName.Equals(srsLocalRegistrySettings.GetString(Resources.frmConfiguration_srsKeyTargetServiceProcessName, Resources.frmConfiguration_srsKeyTargetServiceProcessName_DefaultValue))).ToList().FirstOrDefault();
+
+                        welCurrentWindowsEventLogger.WriteEntry(Resources.TargetService_StartedSuccessful, 0, WindowsEventLogger.LogType.Information);
+                        welCurrentWindowsEventLogger.WriteConsole(Resources.TargetService_StartedSuccessful, WindowsEventLogger.LogType.Information, false);
+                    }
+                    else {
+                        welCurrentWindowsEventLogger.WriteEntry(Resources.TargetService_StartedNotSuccessful, 0, WindowsEventLogger.LogType.Warning);
+                        welCurrentWindowsEventLogger.WriteConsole(Resources.TargetService_StartedNotSuccessful, WindowsEventLogger.LogType.Warning, false);
+                        welCurrentWindowsEventLogger.WriteEntry(Resources.TargetService_RestartedNotSuccessful, 0, WindowsEventLogger.LogType.Warning);
+                        welCurrentWindowsEventLogger.WriteConsole(Resources.TargetService_RestartedNotSuccessful, WindowsEventLogger.LogType.Warning, false);
+                        return;
+                    }
+                }
+                catch {
+                    welCurrentWindowsEventLogger.WriteEntry(Resources.TargetService_StartedNotSuccessful, 0, WindowsEventLogger.LogType.Warning);
+                    welCurrentWindowsEventLogger.WriteConsole(Resources.TargetService_StartedNotSuccessful, WindowsEventLogger.LogType.Warning, false);
+                    welCurrentWindowsEventLogger.WriteEntry(Resources.TargetService_RestartedNotSuccessful, 0, WindowsEventLogger.LogType.Warning);
+                    welCurrentWindowsEventLogger.WriteConsole(Resources.TargetService_RestartedNotSuccessful, WindowsEventLogger.LogType.Warning, false);
+                    return;
+                }
+            }
+
+            welCurrentWindowsEventLogger.WriteEntry(Resources.TargetService_RestartedSuccessful, 0, WindowsEventLogger.LogType.Information);
+            welCurrentWindowsEventLogger.WriteConsole(Resources.TargetService_RestartedSuccessful, WindowsEventLogger.LogType.Information, false);
         }
     }
 
@@ -252,6 +344,7 @@ namespace KON.DVBVMSMonitor {
 		public void WriteEntry(string strLocalMessage, int intLocalID, LogType ltLocalLogType) {
 			WriteWindowsEvent(strLocalMessage, intLocalID, ltLocalLogType);
 		}
+
         public void WriteConsole(string strLocalMessage, LogType ltLocalLogType, bool bLocalMandatoryMessage) {
             var strLogLevel = srsLocalRegistrySettings.GetString(Resources.frmConfiguration_srsKeyLogLevel, Resources.frmConfiguration_srsKeyLogLevel_DefaultValue);
             var bLogToConsole = Convert.ToBoolean(srsLocalRegistrySettings.GetInteger(Resources.frmConfiguration_srsKeyLogToConsole, Convert.ToInt32(Convert.ToBoolean(Resources.frmConfiguration_srsKeyLogToConsole_DefaultValue))));
@@ -270,7 +363,6 @@ namespace KON.DVBVMSMonitor {
                 switch (strLogLevel) {
                     case "Information": {
                         Console.WriteLine(@"[" + (EventLogEntryType)ltLocalLogType + @"]: " + strLocalMessage);
-
                         break;
                     }
                     case "Warning": {

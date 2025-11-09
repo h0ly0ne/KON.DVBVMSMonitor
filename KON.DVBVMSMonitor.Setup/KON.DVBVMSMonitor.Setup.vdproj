@@ -321,7 +321,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:KON.DVBVMSMonitor"
         "ProductCode" = "8:{ECB15080-8019-4418-AE23-DAF1211EFD53}"
-        "PackageCode" = "8:{8B744EBB-3626-434F-A7AE-D8C69F3A5834}"
+        "PackageCode" = "8:{55487983-9790-458C-8270-7494283B364A}"
         "UpgradeCode" = "8:{38A85E41-2DDF-4D19-BD73-66A3C220CA33}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
@@ -443,7 +443,7 @@
         {
             "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_DF04FC4D6AF24FC79A19F9DF0D0EA49D"
             {
-            "Name" = "8:KON.DVBVMSMonitor"
+            "Name" = "8:KON.DVBVMSMonitor Configuration"
             "Arguments" = "8:"
             "Description" = "8:"
             "ShowCmd" = "3:1"

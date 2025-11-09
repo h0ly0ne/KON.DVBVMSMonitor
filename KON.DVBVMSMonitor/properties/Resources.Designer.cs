@@ -304,24 +304,6 @@ namespace KON.DVBVMSMonitor {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die WebServiceCheckInterval ähnelt.
-        /// </summary>
-        internal static string frmConfiguration_srsKeyWebServiceCheckInterval {
-            get {
-                return ResourceManager.GetString("frmConfiguration_srsKeyWebServiceCheckInterval", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die 10 ähnelt.
-        /// </summary>
-        internal static string frmConfiguration_srsKeyWebServiceCheckInterval_DefaultValue {
-            get {
-                return ResourceManager.GetString("frmConfiguration_srsKeyWebServiceCheckInterval_DefaultValue", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die WebServiceEnabled ähnelt.
         /// </summary>
         internal static string frmConfiguration_srsKeyWebServiceEnabled {
@@ -432,9 +414,9 @@ namespace KON.DVBVMSMonitor {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die There was an error un-/installing the service: ähnelt.
         /// </summary>
-        internal static string Service_UnInstalling_Error {
+        internal static string Service_Uninstalling_Error {
             get {
-                return ResourceManager.GetString("Service_UnInstalling_Error", resourceCulture);
+                return ResourceManager.GetString("Service_Uninstalling_Error", resourceCulture);
             }
         }
         

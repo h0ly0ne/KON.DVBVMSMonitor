@@ -123,7 +123,7 @@
   <data name="Service_Uninstalling" xml:space="preserve">
     <value>Uninstalling service at</value>
   </data>
-  <data name="Service_UnInstalling_Error" xml:space="preserve">
+  <data name="Service_Uninstalling_Error" xml:space="preserve">
     <value>There was an error un-/installing the service:</value>
   </data>
   <data name="Program_AdministratorRequired" xml:space="preserve">
@@ -269,12 +269,6 @@
   </data>
   <data name="frmConfiguration_srsKeyWebServiceEnabled_DefaultValue" xml:space="preserve">
     <value>true</value>
-  </data>
-  <data name="frmConfiguration_srsKeyWebServiceCheckInterval" xml:space="preserve">
-    <value>WebServiceCheckInterval</value>
-  </data>
-  <data name="frmConfiguration_srsKeyWebServiceCheckInterval_DefaultValue" xml:space="preserve">
-    <value>10</value>
   </data>
   <data name="frmConfiguration_srsKeyForceBindEnabled" xml:space="preserve">
     <value>ForceBindEnabled</value>

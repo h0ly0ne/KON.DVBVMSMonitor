@@ -24,7 +24,16 @@
     <Content Include="properties\KON.DVBVMSMonitor.ico" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="Microsoft.NETCore.Platforms" Version="7.0.4" />
+    <PackageReference Include="Microsoft.NETCore.Targets" Version="5.0.0" />
+    <PackageReference Include="Microsoft.Win32.Registry" Version="5.0.0" />
+    <PackageReference Include="Microsoft.Win32.SystemEvents" Version="9.0.10" />
+    <PackageReference Include="runtime.native.System" Version="4.3.1" />
+    <PackageReference Include="System.Diagnostics.EventLog" Version="9.0.10" />
     <PackageReference Include="System.Management" Version="9.0.10" />
+    <PackageReference Include="System.Runtime" Version="4.3.1" />
+    <PackageReference Include="System.Security.AccessControl" Version="6.0.1" />
+    <PackageReference Include="System.ServiceProcess.ServiceController" Version="9.0.10" />
     <PackageReference Include="Topshelf" Version="4.3.0" />
   </ItemGroup>
   <ItemGroup>

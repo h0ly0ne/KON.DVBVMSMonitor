@@ -30,7 +30,7 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmConfiguration));
             btnSave = new System.Windows.Forms.Button();
-            lblLogLevel = new System.Windows.Forms.Label();
+            lbLogLevel = new System.Windows.Forms.Label();
             cbLogLevel = new System.Windows.Forms.ComboBox();
             cbLogToConsole = new System.Windows.Forms.CheckBox();
             tbTargetServiceProcessName = new System.Windows.Forms.TextBox();
@@ -45,25 +45,22 @@
             nudTargetServiceCheckInterval = new System.Windows.Forms.NumericUpDown();
             lbTargetServiceCheckInterval = new System.Windows.Forms.Label();
             gbWebService = new System.Windows.Forms.GroupBox();
-            nudWebServiceCheckInterval = new System.Windows.Forms.NumericUpDown();
-            lbWebServiceCheckInterval = new System.Windows.Forms.Label();
             nudWebServiceTimeout = new System.Windows.Forms.NumericUpDown();
             tbWebServiceUrl = new System.Windows.Forms.TextBox();
             lbWebServiceTimeout = new System.Windows.Forms.Label();
-            lblWebServiceUrl = new System.Windows.Forms.Label();
+            lbWebServiceUrl = new System.Windows.Forms.Label();
             cbWebServiceEnabled = new System.Windows.Forms.CheckBox();
             gbForceBind = new System.Windows.Forms.GroupBox();
+            cbForceBindEnabled = new System.Windows.Forms.CheckBox();
             tbForceBindIPAddress = new System.Windows.Forms.TextBox();
             lbForceBindIPAddress = new System.Windows.Forms.Label();
             tbForceBindPathWithFilename = new System.Windows.Forms.TextBox();
             lbForceBindPathWithFilename = new System.Windows.Forms.Label();
-            cbForceBindEnabled = new System.Windows.Forms.CheckBox();
             nudTargetServiceTimeout = new System.Windows.Forms.NumericUpDown();
             lbTargetServiceTimeout = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)nudTargetServiceStartDelay).BeginInit();
             ((System.ComponentModel.ISupportInitialize)nudTargetServiceCheckInterval).BeginInit();
             gbWebService.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)nudWebServiceCheckInterval).BeginInit();
             ((System.ComponentModel.ISupportInitialize)nudWebServiceTimeout).BeginInit();
             gbForceBind.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)nudTargetServiceTimeout).BeginInit();
@@ -71,7 +68,7 @@
             // 
             // btnSave
             // 
-            btnSave.Location = new System.Drawing.Point(493, 476);
+            btnSave.Location = new System.Drawing.Point(493, 445);
             btnSave.Name = "btnSave";
             btnSave.Size = new System.Drawing.Size(75, 23);
             btnSave.TabIndex = 4;
@@ -79,20 +76,20 @@
             btnSave.UseVisualStyleBackColor = true;
             btnSave.Click += btnSave_Click;
             // 
-            // lblLogLevel
+            // lbLogLevel
             // 
-            lblLogLevel.AutoSize = true;
-            lblLogLevel.Location = new System.Drawing.Point(18, 416);
-            lblLogLevel.Name = "lblLogLevel";
-            lblLogLevel.Size = new System.Drawing.Size(60, 15);
-            lblLogLevel.TabIndex = 9;
-            lblLogLevel.Text = "Log Level:";
+            lbLogLevel.AutoSize = true;
+            lbLogLevel.Location = new System.Drawing.Point(18, 385);
+            lbLogLevel.Name = "lbLogLevel";
+            lbLogLevel.Size = new System.Drawing.Size(60, 15);
+            lbLogLevel.TabIndex = 9;
+            lbLogLevel.Text = "Log Level:";
             // 
             // cbLogLevel
             // 
             cbLogLevel.FormattingEnabled = true;
             cbLogLevel.Items.AddRange(new object[] { "Error", "Warning", "Information" });
-            cbLogLevel.Location = new System.Drawing.Point(208, 413);
+            cbLogLevel.Location = new System.Drawing.Point(208, 382);
             cbLogLevel.Name = "cbLogLevel";
             cbLogLevel.Size = new System.Drawing.Size(354, 23);
             cbLogLevel.TabIndex = 10;
@@ -101,7 +98,7 @@
             // cbLogToConsole
             // 
             cbLogToConsole.AutoSize = true;
-            cbLogToConsole.Location = new System.Drawing.Point(208, 442);
+            cbLogToConsole.Location = new System.Drawing.Point(208, 411);
             cbLogToConsole.Name = "cbLogToConsole";
             cbLogToConsole.Size = new System.Drawing.Size(104, 19);
             cbLogToConsole.TabIndex = 11;
@@ -145,7 +142,7 @@
             // cbVerboseLogging
             // 
             cbVerboseLogging.AutoSize = true;
-            cbVerboseLogging.Location = new System.Drawing.Point(448, 442);
+            cbVerboseLogging.Location = new System.Drawing.Point(448, 411);
             cbVerboseLogging.Name = "cbVerboseLogging";
             cbVerboseLogging.Size = new System.Drawing.Size(114, 19);
             cbVerboseLogging.TabIndex = 18;
@@ -207,41 +204,20 @@
             // 
             // gbWebService
             // 
-            gbWebService.Controls.Add(nudWebServiceCheckInterval);
-            gbWebService.Controls.Add(lbWebServiceCheckInterval);
             gbWebService.Controls.Add(nudWebServiceTimeout);
             gbWebService.Controls.Add(tbWebServiceUrl);
             gbWebService.Controls.Add(lbWebServiceTimeout);
-            gbWebService.Controls.Add(lblWebServiceUrl);
+            gbWebService.Controls.Add(lbWebServiceUrl);
             gbWebService.Location = new System.Drawing.Point(12, 196);
             gbWebService.Name = "gbWebService";
-            gbWebService.Size = new System.Drawing.Size(556, 116);
+            gbWebService.Size = new System.Drawing.Size(556, 85);
             gbWebService.TabIndex = 33;
             gbWebService.TabStop = false;
-            gbWebService.Text = "WebService";
-            // 
-            // nudWebServiceCheckInterval
-            // 
-            nudWebServiceCheckInterval.Location = new System.Drawing.Point(196, 22);
-            nudWebServiceCheckInterval.Maximum = new decimal(new int[] { 60, 0, 0, 0 });
-            nudWebServiceCheckInterval.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
-            nudWebServiceCheckInterval.Name = "nudWebServiceCheckInterval";
-            nudWebServiceCheckInterval.Size = new System.Drawing.Size(55, 23);
-            nudWebServiceCheckInterval.TabIndex = 19;
-            nudWebServiceCheckInterval.Value = new decimal(new int[] { 10, 0, 0, 0 });
-            // 
-            // lbWebServiceCheckInterval
-            // 
-            lbWebServiceCheckInterval.AutoSize = true;
-            lbWebServiceCheckInterval.Location = new System.Drawing.Point(6, 24);
-            lbWebServiceCheckInterval.Name = "lbWebServiceCheckInterval";
-            lbWebServiceCheckInterval.Size = new System.Drawing.Size(162, 15);
-            lbWebServiceCheckInterval.TabIndex = 18;
-            lbWebServiceCheckInterval.Text = "WebService CheckInterval (s):";
+            gbWebService.Text = "WebService Check";
             // 
             // nudWebServiceTimeout
             // 
-            nudWebServiceTimeout.Location = new System.Drawing.Point(196, 80);
+            nudWebServiceTimeout.Location = new System.Drawing.Point(196, 51);
             nudWebServiceTimeout.Maximum = new decimal(new int[] { 60, 0, 0, 0 });
             nudWebServiceTimeout.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
             nudWebServiceTimeout.Name = "nudWebServiceTimeout";
@@ -251,7 +227,7 @@
             // 
             // tbWebServiceUrl
             // 
-            tbWebServiceUrl.Location = new System.Drawing.Point(196, 51);
+            tbWebServiceUrl.Location = new System.Drawing.Point(196, 22);
             tbWebServiceUrl.Name = "tbWebServiceUrl";
             tbWebServiceUrl.Size = new System.Drawing.Size(354, 23);
             tbWebServiceUrl.TabIndex = 16;
@@ -260,27 +236,27 @@
             // lbWebServiceTimeout
             // 
             lbWebServiceTimeout.AutoSize = true;
-            lbWebServiceTimeout.Location = new System.Drawing.Point(6, 82);
+            lbWebServiceTimeout.Location = new System.Drawing.Point(6, 53);
             lbWebServiceTimeout.Name = "lbWebServiceTimeout";
             lbWebServiceTimeout.Size = new System.Drawing.Size(135, 15);
             lbWebServiceTimeout.TabIndex = 15;
             lbWebServiceTimeout.Text = "WebService Timeout (s):";
             // 
-            // lblWebServiceUrl
+            // lbWebServiceUrl
             // 
-            lblWebServiceUrl.AutoSize = true;
-            lblWebServiceUrl.Location = new System.Drawing.Point(6, 54);
-            lblWebServiceUrl.Name = "lblWebServiceUrl";
-            lblWebServiceUrl.Size = new System.Drawing.Size(89, 15);
-            lblWebServiceUrl.TabIndex = 14;
-            lblWebServiceUrl.Text = "WebService Url:";
+            lbWebServiceUrl.AutoSize = true;
+            lbWebServiceUrl.Location = new System.Drawing.Point(6, 25);
+            lbWebServiceUrl.Name = "lbWebServiceUrl";
+            lbWebServiceUrl.Size = new System.Drawing.Size(89, 15);
+            lbWebServiceUrl.TabIndex = 14;
+            lbWebServiceUrl.Text = "WebService Url:";
             // 
             // cbWebServiceEnabled
             // 
             cbWebServiceEnabled.AutoSize = true;
             cbWebServiceEnabled.Checked = true;
             cbWebServiceEnabled.CheckState = System.Windows.Forms.CheckState.Checked;
-            cbWebServiceEnabled.Location = new System.Drawing.Point(497, 193);
+            cbWebServiceEnabled.Location = new System.Drawing.Point(497, 195);
             cbWebServiceEnabled.Name = "cbWebServiceEnabled";
             cbWebServiceEnabled.Size = new System.Drawing.Size(68, 19);
             cbWebServiceEnabled.TabIndex = 37;
@@ -290,16 +266,28 @@
             // 
             // gbForceBind
             // 
+            gbForceBind.Controls.Add(cbForceBindEnabled);
             gbForceBind.Controls.Add(tbForceBindIPAddress);
             gbForceBind.Controls.Add(lbForceBindIPAddress);
             gbForceBind.Controls.Add(tbForceBindPathWithFilename);
             gbForceBind.Controls.Add(lbForceBindPathWithFilename);
-            gbForceBind.Location = new System.Drawing.Point(12, 318);
+            gbForceBind.Location = new System.Drawing.Point(12, 287);
             gbForceBind.Name = "gbForceBind";
             gbForceBind.Size = new System.Drawing.Size(556, 89);
             gbForceBind.TabIndex = 34;
             gbForceBind.TabStop = false;
             gbForceBind.Text = "ForceBind";
+            // 
+            // cbForceBindEnabled
+            // 
+            cbForceBindEnabled.AutoSize = true;
+            cbForceBindEnabled.Location = new System.Drawing.Point(485, 0);
+            cbForceBindEnabled.Name = "cbForceBindEnabled";
+            cbForceBindEnabled.Size = new System.Drawing.Size(68, 19);
+            cbForceBindEnabled.TabIndex = 37;
+            cbForceBindEnabled.Text = "Enabled";
+            cbForceBindEnabled.UseVisualStyleBackColor = true;
+            cbForceBindEnabled.CheckedChanged += cbForceBindEnabled_CheckedChanged;
             // 
             // tbForceBindIPAddress
             // 
@@ -335,17 +323,6 @@
             lbForceBindPathWithFilename.TabIndex = 27;
             lbForceBindPathWithFilename.Text = "ForceBind Path with Filename:";
             // 
-            // cbForceBindEnabled
-            // 
-            cbForceBindEnabled.AutoSize = true;
-            cbForceBindEnabled.Location = new System.Drawing.Point(497, 315);
-            cbForceBindEnabled.Name = "cbForceBindEnabled";
-            cbForceBindEnabled.Size = new System.Drawing.Size(68, 19);
-            cbForceBindEnabled.TabIndex = 37;
-            cbForceBindEnabled.Text = "Enabled";
-            cbForceBindEnabled.UseVisualStyleBackColor = true;
-            cbForceBindEnabled.CheckedChanged += cbForceBindEnabled_CheckedChanged;
-            // 
             // nudTargetServiceTimeout
             // 
             nudTargetServiceTimeout.Location = new System.Drawing.Point(208, 157);
@@ -369,8 +346,7 @@
             // 
             AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            ClientSize = new System.Drawing.Size(586, 513);
-            Controls.Add(cbForceBindEnabled);
+            ClientSize = new System.Drawing.Size(586, 482);
             Controls.Add(cbWebServiceEnabled);
             Controls.Add(nudTargetServiceTimeout);
             Controls.Add(lbTargetServiceTimeout);
@@ -389,20 +365,19 @@
             Controls.Add(lbTargetServiceProcessName);
             Controls.Add(cbLogToConsole);
             Controls.Add(cbLogLevel);
-            Controls.Add(lblLogLevel);
+            Controls.Add(lbLogLevel);
             Controls.Add(btnSave);
             FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             Icon = (System.Drawing.Icon)resources.GetObject("$this.Icon");
             MaximizeBox = false;
             MinimizeBox = false;
             Name = "frmConfiguration";
-            Text = "DVBMSMonitor Configuration";
+            Text = "KON.DVBMSMonitor Configuration";
             Load += Configuration_Load;
             ((System.ComponentModel.ISupportInitialize)nudTargetServiceStartDelay).EndInit();
             ((System.ComponentModel.ISupportInitialize)nudTargetServiceCheckInterval).EndInit();
             gbWebService.ResumeLayout(false);
             gbWebService.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)nudWebServiceCheckInterval).EndInit();
             ((System.ComponentModel.ISupportInitialize)nudWebServiceTimeout).EndInit();
             gbForceBind.ResumeLayout(false);
             gbForceBind.PerformLayout();
@@ -414,7 +389,7 @@
 
         #endregion
         private System.Windows.Forms.Button btnSave;
-        private System.Windows.Forms.Label lblLogLevel;
+        private System.Windows.Forms.Label lbLogLevel;
         private System.Windows.Forms.ComboBox cbLogLevel;
         private System.Windows.Forms.CheckBox cbLogToConsole;
         private System.Windows.Forms.TextBox tbTargetServiceProcessName;
@@ -429,12 +404,10 @@
         private System.Windows.Forms.NumericUpDown nudTargetServiceCheckInterval;
         private System.Windows.Forms.Label lbTargetServiceCheckInterval;
         private System.Windows.Forms.GroupBox gbWebService;
-        private System.Windows.Forms.NumericUpDown nudWebServiceCheckInterval;
-        private System.Windows.Forms.Label lbWebServiceCheckInterval;
         private System.Windows.Forms.NumericUpDown nudWebServiceTimeout;
         private System.Windows.Forms.TextBox tbWebServiceUrl;
         private System.Windows.Forms.Label lbWebServiceTimeout;
-        private System.Windows.Forms.Label lblWebServiceUrl;
+        private System.Windows.Forms.Label lbWebServiceUrl;
         private System.Windows.Forms.GroupBox gbForceBind;
         private System.Windows.Forms.TextBox tbForceBindIPAddress;
         private System.Windows.Forms.Label lbForceBindIPAddress;

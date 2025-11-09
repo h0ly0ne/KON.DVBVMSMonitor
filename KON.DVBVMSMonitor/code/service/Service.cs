@@ -10,8 +10,6 @@ namespace KON.DVBVMSMonitor
 {
     [SupportedOSPlatform("windows")]
     public class Service {
-        private static RegistrySettings srsLocalRegistrySettings { get; } = new(Resources.Program_Name, RegistrySettings.RegistryHive.HKLM);
-        private static Process pLocalTargetServiceProcess;
         private Timer tLocalCheckTimer;
         private static HttpClientHandler hcLocalHttpClientHandler = new() { ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator };
         private HttpClient hcLocalHttpClient = new(hcLocalHttpClientHandler);
@@ -24,14 +22,14 @@ namespace KON.DVBVMSMonitor
         }
 
         public void Start() {
-            var bForceBindEnabled = srsLocalRegistrySettings.GetBoolean(Resources.frmConfiguration_srsKeyForceBindEnabled, Convert.ToBoolean(Resources.frmConfiguration_srsKeyForceBindEnabled_DefaultValue));
-            var sTargetServiceName = srsLocalRegistrySettings.GetString(Resources.frmConfiguration_srsKeyTargetServiceName, Resources.frmConfiguration_srsKeyTargetServiceName_DefaultValue);
-            var sTargetServiceProcessName = srsLocalRegistrySettings.GetString(Resources.frmConfiguration_srsKeyTargetServiceProcessName, Resources.frmConfiguration_srsKeyTargetServiceProcessName_DefaultValue);
-            var sForceBindPathWithFilename = srsLocalRegistrySettings.GetString(Resources.frmConfiguration_srsKeyForceBindPathWithFilename, Resources.frmConfiguration_srsKeyForceBindPathWithFilename_DefaultValue);
-            var sForceBindIPAddress = srsLocalRegistrySettings.GetString(Resources.frmConfiguration_srsKeyForceBindIPAddress, Resources.frmConfiguration_srsKeyForceBindIPAddress_DefaultValue);
-            var sTargetServicePathWithFilename = srsLocalRegistrySettings.GetString(Resources.frmConfiguration_srsKeyTargetServicePathWithFilename, Resources.frmConfiguration_srsKeyTargetServicePathWithFilename_DefaultValue);
-            var iTargetServiceStartDelay = srsLocalRegistrySettings.GetInteger(Resources.frmConfiguration_srsKeyTargetServiceStartDelay, Convert.ToInt32(Resources.frmConfiguration_srsKeyTargetServiceStartDelay_DefaultValue));
-            var iTargetServiceTimeout = srsLocalRegistrySettings.GetInteger(Resources.frmConfiguration_srsKeyTargetServiceTimeout, Convert.ToInt32(Resources.frmConfiguration_srsKeyTargetServiceTimeout_DefaultValue));
+            var bForceBindEnabled = Global.srsLocalRegistrySettings.GetBoolean(Resources.frmConfiguration_srsKeyForceBindEnabled, Convert.ToBoolean(Resources.frmConfiguration_srsKeyForceBindEnabled_DefaultValue));
+            var sTargetServiceName = Global.srsLocalRegistrySettings.GetString(Resources.frmConfiguration_srsKeyTargetServiceName, Resources.frmConfiguration_srsKeyTargetServiceName_DefaultValue);
+            var sTargetServiceProcessName = Global.srsLocalRegistrySettings.GetString(Resources.frmConfiguration_srsKeyTargetServiceProcessName, Resources.frmConfiguration_srsKeyTargetServiceProcessName_DefaultValue);
+            var sForceBindPathWithFilename = Global.srsLocalRegistrySettings.GetString(Resources.frmConfiguration_srsKeyForceBindPathWithFilename, Resources.frmConfiguration_srsKeyForceBindPathWithFilename_DefaultValue);
+            var sForceBindIPAddress = Global.srsLocalRegistrySettings.GetString(Resources.frmConfiguration_srsKeyForceBindIPAddress, Resources.frmConfiguration_srsKeyForceBindIPAddress_DefaultValue);
+            var sTargetServicePathWithFilename = Global.srsLocalRegistrySettings.GetString(Resources.frmConfiguration_srsKeyTargetServicePathWithFilename, Resources.frmConfiguration_srsKeyTargetServicePathWithFilename_DefaultValue);
+            var iTargetServiceStartDelay = Global.srsLocalRegistrySettings.GetInteger(Resources.frmConfiguration_srsKeyTargetServiceStartDelay, Convert.ToInt32(Resources.frmConfiguration_srsKeyTargetServiceStartDelay_DefaultValue));
+            var iTargetServiceTimeout = Global.srsLocalRegistrySettings.GetInteger(Resources.frmConfiguration_srsKeyTargetServiceTimeout, Convert.ToInt32(Resources.frmConfiguration_srsKeyTargetServiceTimeout_DefaultValue));
 
             if (bForceBindEnabled) {
                 if (!Global.IsServiceDisabled(sTargetServiceName)) {
@@ -60,18 +58,18 @@ namespace KON.DVBVMSMonitor
 
                 try {
                     Process.GetProcesses().Where(pr => pr.ProcessName.Equals(sTargetServiceProcessName)).ToList().ForEach(delegate (Process pCurrentProcess) { pCurrentProcess.Kill(); pCurrentProcess.WaitForExit(); pCurrentProcess.Dispose(); });
-                    pLocalTargetServiceProcess = Process.GetProcesses().Where(pr => pr.ProcessName.Equals(sTargetServiceProcessName)).ToList().FirstOrDefault();
+                    Global.pLocalTargetServiceProcess = Process.GetProcesses().Where(pr => pr.ProcessName.Equals(sTargetServiceProcessName)).ToList().FirstOrDefault();
 
-                    if (pLocalTargetServiceProcess == null) {
+                    if (Global.pLocalTargetServiceProcess == null) {
                         if (iTargetServiceStartDelay > 0) {
                             Global.welCurrentWindowsEventLogger.WriteEntry(Resources.TargetService_StartDelayed, 0, WindowsEventLogger.LogType.Information);
                             Global.welCurrentWindowsEventLogger.WriteConsole(Resources.TargetService_StartDelayed, WindowsEventLogger.LogType.Information, false);
                             Thread.Sleep(iTargetServiceStartDelay * 1000);
                         }
 
-                        pLocalTargetServiceProcess = Process.Start("\"" + sForceBindPathWithFilename + "\" " + sForceBindIPAddress + " \"" + sTargetServicePathWithFilename + "\"");
+                        Global.pLocalTargetServiceProcess = Process.Start("\"" + sForceBindPathWithFilename + "\" " + sForceBindIPAddress + " \"" + sTargetServicePathWithFilename + "\"");
                         Thread.Sleep(1000);
-                        pLocalTargetServiceProcess = Process.GetProcesses().Where(pr => pr.ProcessName.Equals(srsLocalRegistrySettings.GetString(Resources.frmConfiguration_srsKeyTargetServiceProcessName, Resources.frmConfiguration_srsKeyTargetServiceProcessName_DefaultValue))).ToList().FirstOrDefault();
+                        Global.pLocalTargetServiceProcess = Process.GetProcesses().Where(pr => pr.ProcessName.Equals(Global.srsLocalRegistrySettings.GetString(Resources.frmConfiguration_srsKeyTargetServiceProcessName, Resources.frmConfiguration_srsKeyTargetServiceProcessName_DefaultValue))).ToList().FirstOrDefault();
 
                         Global.welCurrentWindowsEventLogger.WriteEntry(Resources.TargetService_StartedSuccessful, 0, WindowsEventLogger.LogType.Information);
                         Global.welCurrentWindowsEventLogger.WriteConsole(Resources.TargetService_StartedSuccessful, WindowsEventLogger.LogType.Information, false);
@@ -119,8 +117,8 @@ namespace KON.DVBVMSMonitor
             }
 
             try {
-                hcLocalHttpClient.Timeout = TimeSpan.FromSeconds(Convert.ToInt32(srsLocalRegistrySettings.GetInteger(Resources.frmConfiguration_srsKeyWebServiceTimeout, Convert.ToInt32(Resources.frmConfiguration_srsKeyWebServiceTimeout_DefaultValue))));
-                tLocalCheckTimer = new Timer(TimerCallback, null, TimeSpan.Zero, TimeSpan.FromSeconds(Convert.ToInt32(srsLocalRegistrySettings.GetInteger(Resources.frmConfiguration_srsKeyTargetServiceCheckInterval, Convert.ToInt32(Resources.frmConfiguration_srsKeyTargetServiceCheckInterval_DefaultValue)))));
+                hcLocalHttpClient.Timeout = TimeSpan.FromSeconds(Convert.ToInt32(Global.srsLocalRegistrySettings.GetInteger(Resources.frmConfiguration_srsKeyWebServiceTimeout, Convert.ToInt32(Resources.frmConfiguration_srsKeyWebServiceTimeout_DefaultValue))));
+                tLocalCheckTimer = new Timer(TimerCallback, null, TimeSpan.Zero, TimeSpan.FromSeconds(Convert.ToInt32(Global.srsLocalRegistrySettings.GetInteger(Resources.frmConfiguration_srsKeyTargetServiceCheckInterval, Convert.ToInt32(Resources.frmConfiguration_srsKeyTargetServiceCheckInterval_DefaultValue)))));
             }
             catch {
                 Stop();
@@ -129,10 +127,10 @@ namespace KON.DVBVMSMonitor
 
         public void Stop()
         {
-            var bForceBindEnabled = srsLocalRegistrySettings.GetBoolean(Resources.frmConfiguration_srsKeyForceBindEnabled, Convert.ToBoolean(Resources.frmConfiguration_srsKeyForceBindEnabled_DefaultValue));
-            var sTargetServiceName = srsLocalRegistrySettings.GetString(Resources.frmConfiguration_srsKeyTargetServiceName, Resources.frmConfiguration_srsKeyTargetServiceName_DefaultValue);
-            var sTargetServiceProcessName = srsLocalRegistrySettings.GetString(Resources.frmConfiguration_srsKeyTargetServiceProcessName, Resources.frmConfiguration_srsKeyTargetServiceProcessName_DefaultValue);
-            var iTargetServiceTimeout = srsLocalRegistrySettings.GetInteger(Resources.frmConfiguration_srsKeyTargetServiceTimeout, Convert.ToInt32(Resources.frmConfiguration_srsKeyTargetServiceTimeout_DefaultValue));
+            var bForceBindEnabled = Global.srsLocalRegistrySettings.GetBoolean(Resources.frmConfiguration_srsKeyForceBindEnabled, Convert.ToBoolean(Resources.frmConfiguration_srsKeyForceBindEnabled_DefaultValue));
+            var sTargetServiceName = Global.srsLocalRegistrySettings.GetString(Resources.frmConfiguration_srsKeyTargetServiceName, Resources.frmConfiguration_srsKeyTargetServiceName_DefaultValue);
+            var sTargetServiceProcessName = Global.srsLocalRegistrySettings.GetString(Resources.frmConfiguration_srsKeyTargetServiceProcessName, Resources.frmConfiguration_srsKeyTargetServiceProcessName_DefaultValue);
+            var iTargetServiceTimeout = Global.srsLocalRegistrySettings.GetInteger(Resources.frmConfiguration_srsKeyTargetServiceTimeout, Convert.ToInt32(Resources.frmConfiguration_srsKeyTargetServiceTimeout_DefaultValue));
 
             tLocalCheckTimer?.Dispose();
 
@@ -178,13 +176,18 @@ namespace KON.DVBVMSMonitor
         }
 
         private void TimerCallback(object oLocalState) {
-            CheckWebServer();
+            if (Global.srsLocalRegistrySettings.GetBoolean(Resources.frmConfiguration_srsKeyWebServiceEnabled, Convert.ToBoolean(Resources.frmConfiguration_srsKeyWebServiceEnabled_DefaultValue)))
+                CheckWebServer();
+            else
+            {
+                // TODO - Check for running service and/or process
+            }
         }
 
         private void CheckWebServer() {
-            var sTargetServiceName = srsLocalRegistrySettings.GetString(Resources.frmConfiguration_srsKeyTargetServiceName, Resources.frmConfiguration_srsKeyTargetServiceName_DefaultValue);
-            var strWebServiceUrl = srsLocalRegistrySettings.GetString(Resources.frmConfiguration_srsKeyWebServiceUrl, Resources.frmConfiguration_srsKeyWebServiceUrl_DefaultValue);
-            var iTargetServiceTimeout = srsLocalRegistrySettings.GetInteger(Resources.frmConfiguration_srsKeyTargetServiceTimeout, Convert.ToInt32(Resources.frmConfiguration_srsKeyTargetServiceTimeout_DefaultValue));
+            var sTargetServiceName = Global.srsLocalRegistrySettings.GetString(Resources.frmConfiguration_srsKeyTargetServiceName, Resources.frmConfiguration_srsKeyTargetServiceName_DefaultValue);
+            var strWebServiceUrl = Global.srsLocalRegistrySettings.GetString(Resources.frmConfiguration_srsKeyWebServiceUrl, Resources.frmConfiguration_srsKeyWebServiceUrl_DefaultValue);
+            var iTargetServiceTimeout = Global.srsLocalRegistrySettings.GetInteger(Resources.frmConfiguration_srsKeyTargetServiceTimeout, Convert.ToInt32(Resources.frmConfiguration_srsKeyTargetServiceTimeout_DefaultValue));
 
             try {
                 Global.welCurrentWindowsEventLogger.WriteEntry(Resources.WebService_RequestCreated, 0, WindowsEventLogger.LogType.Information);
@@ -195,14 +198,12 @@ namespace KON.DVBVMSMonitor
                 Global.welCurrentWindowsEventLogger.WriteEntry(Resources.WebService_ResponseCreated, 0, WindowsEventLogger.LogType.Information);
                 Global.welCurrentWindowsEventLogger.WriteConsole(Resources.WebService_ResponseCreated, WindowsEventLogger.LogType.Information, false);
 
-                if (hrmCurrentHttpResponseMessage.StatusCode != HttpStatusCode.OK)
-                {
+                if (hrmCurrentHttpResponseMessage.StatusCode != HttpStatusCode.OK) {
                     Global.welCurrentWindowsEventLogger.WriteEntry(Resources.WebService_StatusCodeNotOK, 0, WindowsEventLogger.LogType.Warning);
                     Global.welCurrentWindowsEventLogger.WriteConsole(Resources.WebService_StatusCodeNotOK, WindowsEventLogger.LogType.Warning, false);
-                    RestartService(sTargetServiceName, iTargetServiceTimeout);
+                    Global.RestartService(sTargetServiceName, iTargetServiceTimeout);
                 }
-                else
-                {
+                else {
                     Global.welCurrentWindowsEventLogger.WriteEntry(Resources.WebService_StatusCodeOK, 0, WindowsEventLogger.LogType.Information);
                     Global.welCurrentWindowsEventLogger.WriteConsole(Resources.WebService_StatusCodeOK, WindowsEventLogger.LogType.Information, false);
                     Global.welCurrentWindowsEventLogger.WriteEntry(Resources.WebService_ServiceRestartNotRequired, 0, WindowsEventLogger.LogType.Information);
@@ -215,106 +216,11 @@ namespace KON.DVBVMSMonitor
             catch {
                 Global.welCurrentWindowsEventLogger.WriteEntry(Resources.WebService_RequestTimedOut, 0, WindowsEventLogger.LogType.Warning);
                 Global.welCurrentWindowsEventLogger.WriteConsole(Resources.WebService_RequestTimedOut, WindowsEventLogger.LogType.Warning, false);
-                RestartService(sTargetServiceName, iTargetServiceTimeout);
+                Global.RestartService(sTargetServiceName, iTargetServiceTimeout);
             }
 
             Global.welCurrentWindowsEventLogger.WriteEntry(Resources.WebService_RequestDisposed, 0, WindowsEventLogger.LogType.Information);
             Global.welCurrentWindowsEventLogger.WriteConsole(Resources.WebService_RequestDisposed, WindowsEventLogger.LogType.Information, false);
-        }
-
-        private static void RestartService(string strLocalTargetServiceName, int iLocalTargetServiceTimeout) {
-            var bForceBindEnabled = srsLocalRegistrySettings.GetBoolean(Resources.frmConfiguration_srsKeyForceBindEnabled, Convert.ToBoolean(Resources.frmConfiguration_srsKeyForceBindEnabled_DefaultValue));
-            var sTargetServiceProcessName = srsLocalRegistrySettings.GetString(Resources.frmConfiguration_srsKeyTargetServiceProcessName, Resources.frmConfiguration_srsKeyTargetServiceProcessName_DefaultValue);
-            var iTargetServiceStartDelay = srsLocalRegistrySettings.GetInteger(Resources.frmConfiguration_srsKeyTargetServiceStartDelay, Convert.ToInt32(Resources.frmConfiguration_srsKeyTargetServiceStartDelay_DefaultValue));
-            var sForceBindPathWithFilename = srsLocalRegistrySettings.GetString(Resources.frmConfiguration_srsKeyForceBindPathWithFilename, Resources.frmConfiguration_srsKeyForceBindPathWithFilename_DefaultValue);
-            var sForceBindIPAddress = srsLocalRegistrySettings.GetString(Resources.frmConfiguration_srsKeyForceBindIPAddress, Resources.frmConfiguration_srsKeyForceBindIPAddress_DefaultValue);
-            var sTargetServicePathWithFilename = srsLocalRegistrySettings.GetString(Resources.frmConfiguration_srsKeyTargetServicePathWithFilename, Resources.frmConfiguration_srsKeyTargetServicePathWithFilename_DefaultValue);
-
-            if (!bForceBindEnabled)
-            {
-                if (Global.IsServiceRunning(strLocalTargetServiceName)) {
-                    Global.welCurrentWindowsEventLogger.WriteEntry(Resources.TargetService_Stopping, 0, WindowsEventLogger.LogType.Information);
-                    Global.welCurrentWindowsEventLogger.WriteConsole(Resources.TargetService_Stopping, WindowsEventLogger.LogType.Information, false);
-
-                    if (Global.StopService(strLocalTargetServiceName, iLocalTargetServiceTimeout)) {
-                        Global.welCurrentWindowsEventLogger.WriteEntry(Resources.TargetService_StoppedSuccessful, 0, WindowsEventLogger.LogType.Information);
-                        Global.welCurrentWindowsEventLogger.WriteConsole(Resources.TargetService_StoppedSuccessful, WindowsEventLogger.LogType.Information, false);
-                    }
-                    else {
-                        try {
-                            Global.welCurrentWindowsEventLogger.WriteEntry(Resources.TargetService_Killing, 0, WindowsEventLogger.LogType.Information);
-                            Global.welCurrentWindowsEventLogger.WriteConsole(Resources.TargetService_Killing, WindowsEventLogger.LogType.Information, false);
-                            Process.GetProcesses().Where(pr => pr.ProcessName.Equals(sTargetServiceProcessName)).ToList().ForEach(delegate (Process pCurrentProcess) { pCurrentProcess.Kill(); pCurrentProcess.WaitForExit(); pCurrentProcess.Dispose(); });
-                            Global.welCurrentWindowsEventLogger.WriteEntry(Resources.TargetService_KilledSuccessful, 0, WindowsEventLogger.LogType.Information);
-                            Global.welCurrentWindowsEventLogger.WriteConsole(Resources.TargetService_KilledSuccessful, WindowsEventLogger.LogType.Information, false);
-                        }
-                        catch {
-                            Global.welCurrentWindowsEventLogger.WriteEntry(Resources.TargetService_KilledNotSuccessful, 0, WindowsEventLogger.LogType.Warning);
-                            Global.welCurrentWindowsEventLogger.WriteConsole(Resources.TargetService_KilledNotSuccessful, WindowsEventLogger.LogType.Warning, false);
-                            Global.welCurrentWindowsEventLogger.WriteEntry(Resources.TargetService_StoppedNotSuccessful, 0, WindowsEventLogger.LogType.Warning);
-                            Global.welCurrentWindowsEventLogger.WriteConsole(Resources.TargetService_StoppedNotSuccessful, WindowsEventLogger.LogType.Warning, false);
-                            return;
-                        }
-                    }
-                }
-
-                if (!Global.IsServiceRunning(strLocalTargetServiceName)) {
-                    Global.welCurrentWindowsEventLogger.WriteEntry(Resources.TargetService_Starting, 0, WindowsEventLogger.LogType.Information);
-                    Global.welCurrentWindowsEventLogger.WriteConsole(Resources.TargetService_Starting, WindowsEventLogger.LogType.Information, false);
-
-                    if (Global.StartService(strLocalTargetServiceName, iLocalTargetServiceTimeout)) {
-                        Global.welCurrentWindowsEventLogger.WriteEntry(Resources.TargetService_StartedSuccessful, 0, WindowsEventLogger.LogType.Information);
-                        Global.welCurrentWindowsEventLogger.WriteConsole(Resources.TargetService_StartedSuccessful, WindowsEventLogger.LogType.Information, false);
-                    }
-                    else {
-                        Global.welCurrentWindowsEventLogger.WriteEntry(Resources.TargetService_StartedNotSuccessful, 0, WindowsEventLogger.LogType.Warning);
-                        Global.welCurrentWindowsEventLogger.WriteConsole(Resources.TargetService_StartedNotSuccessful, WindowsEventLogger.LogType.Warning, false);
-                        Global.welCurrentWindowsEventLogger.WriteEntry(Resources.TargetService_RestartedNotSuccessful, 0, WindowsEventLogger.LogType.Warning);
-                        Global.welCurrentWindowsEventLogger.WriteConsole(Resources.TargetService_RestartedNotSuccessful, WindowsEventLogger.LogType.Warning, false);
-                        return;
-                    }
-                }
-            }
-            else {
-                try
-                {
-                    Process.GetProcesses().Where(pr => pr.ProcessName.Equals(sTargetServiceProcessName)).ToList().ForEach(delegate (Process pCurrentProcess) { pCurrentProcess.Kill(); pCurrentProcess.WaitForExit(); pCurrentProcess.Dispose(); });
-                    pLocalTargetServiceProcess = Process.GetProcesses().Where(pr => pr.ProcessName.Equals(sTargetServiceProcessName)).ToList().FirstOrDefault();
-
-                    if (pLocalTargetServiceProcess == null) {
-                        if (iTargetServiceStartDelay > 0) {
-                            Global.welCurrentWindowsEventLogger.WriteEntry(Resources.TargetService_StartDelayed, 0, WindowsEventLogger.LogType.Information);
-                            Global.welCurrentWindowsEventLogger.WriteConsole(Resources.TargetService_StartDelayed, WindowsEventLogger.LogType.Information, false);
-                            Thread.Sleep(iTargetServiceStartDelay * 1000);
-                        }
-
-                        pLocalTargetServiceProcess = Process.Start("\"" + sForceBindPathWithFilename + "\" " + sForceBindIPAddress + " \"" + sTargetServicePathWithFilename + "\"");
-                        Thread.Sleep(1000);
-                        pLocalTargetServiceProcess = Process.GetProcesses().Where(pr => pr.ProcessName.Equals(srsLocalRegistrySettings.GetString(Resources.frmConfiguration_srsKeyTargetServiceProcessName, Resources.frmConfiguration_srsKeyTargetServiceProcessName_DefaultValue))).ToList().FirstOrDefault();
-
-                        Global.welCurrentWindowsEventLogger.WriteEntry(Resources.TargetService_StartedSuccessful, 0, WindowsEventLogger.LogType.Information);
-                        Global.welCurrentWindowsEventLogger.WriteConsole(Resources.TargetService_StartedSuccessful, WindowsEventLogger.LogType.Information, false);
-                    }
-                    else {
-                        Global.welCurrentWindowsEventLogger.WriteEntry(Resources.TargetService_StartedNotSuccessful, 0, WindowsEventLogger.LogType.Warning);
-                        Global.welCurrentWindowsEventLogger.WriteConsole(Resources.TargetService_StartedNotSuccessful, WindowsEventLogger.LogType.Warning, false);
-                        Global.welCurrentWindowsEventLogger.WriteEntry(Resources.TargetService_RestartedNotSuccessful, 0, WindowsEventLogger.LogType.Warning);
-                        Global.welCurrentWindowsEventLogger.WriteConsole(Resources.TargetService_RestartedNotSuccessful, WindowsEventLogger.LogType.Warning, false);
-                        return;
-                    }
-                }
-                catch
-                {
-                    Global.welCurrentWindowsEventLogger.WriteEntry(Resources.TargetService_StartedNotSuccessful, 0, WindowsEventLogger.LogType.Warning);
-                    Global.welCurrentWindowsEventLogger.WriteConsole(Resources.TargetService_StartedNotSuccessful, WindowsEventLogger.LogType.Warning, false);
-                    Global.welCurrentWindowsEventLogger.WriteEntry(Resources.TargetService_RestartedNotSuccessful, 0, WindowsEventLogger.LogType.Warning);
-                    Global.welCurrentWindowsEventLogger.WriteConsole(Resources.TargetService_RestartedNotSuccessful, WindowsEventLogger.LogType.Warning, false);
-                    return;
-                }
-            }
-
-            Global.welCurrentWindowsEventLogger.WriteEntry(Resources.TargetService_RestartedSuccessful, 0, WindowsEventLogger.LogType.Information);
-            Global.welCurrentWindowsEventLogger.WriteConsole(Resources.TargetService_RestartedSuccessful, WindowsEventLogger.LogType.Information, false);
         }
     }
 }
