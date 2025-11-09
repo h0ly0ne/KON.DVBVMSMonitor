@@ -2,6 +2,7 @@
 Windows service to monitor DVBViewer MediaServer
 
 Features:
+- Installed as a windows service for non-interactive hosting (of itself)
 - Delaying start of DVBViewer MediaServer
 - Check for running DVBViewer MediaServer windows service and restart it if required
 - Check for available webservices of DVBViewer MediaServer and restart it if required
